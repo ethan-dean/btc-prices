@@ -1,1 +1,2 @@
-bitcoin_logs/*
+data_logs/*
+error.log
