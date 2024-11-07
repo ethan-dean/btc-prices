@@ -42,7 +42,7 @@ Description=Run Bitcoin Price Logger every minute
 
 [Timer]
 OnCalendar=*:0/1
-Persistent=true
+AccuracySec=1s
 
 [Install]
 WantedBy=timers.target
