@@ -1,2 +1,4 @@
 data_logs/*
+yf_data_logs/*
 error.log
+archive

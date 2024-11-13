@@ -21,7 +21,17 @@ Description=Bitcoin Price Logger Service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 /path/to/bitcoin_price_logger.py
+ExecStart=/usr/bin/python3 /path/to/btc_prices.py
+```
+
+Add the following configuration for using the yfinance script:
+```ini
+[Unit]
+Description=yf Bitcoin Price Logger Service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /path/to/yf_btc_prices.py
 ```
 
 Type=oneshot: Ensures the service only runs once per invocation.
@@ -41,15 +51,29 @@ Add the following configuration to the file:
 Description=Run Bitcoin Price Logger every minute
 
 [Timer]
-OnCalendar=*:0/1
+OnCalendar=*:*:* *:*:00
 AccuracySec=1s
 
 [Install]
 WantedBy=timers.target
 ```
 
-OnCalendar=*:0/1: Runs the timer every minute.
-Persistent=true: Ensures that missed runs (e.g., if the system is off) are made up for on the next activation.
+OnCalendar=*:*:* *:*:00 Runs the timer every minute.
+
+Add the following configuration for using the yfinance script:
+```ini
+[Unit]
+Description=Run yf Bitcoin Price Logger every minute
+
+[Timer]
+OnCalendar=*-*-* 00:00:30
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target
+```
+
+OnCalendar=*:*:* 00:00:30 Runs the timer every minute.
 
 Save and close the file.
 
@@ -70,12 +94,13 @@ To verify that the timer is running:
 ```bash
 systemctl status bitcoin_price_logger.timer
 ```
+or
+```bash
+systemctl status yf_bitcoin_price_logger.timer
+```
 
 To check logs for the script’s output:
 ```bash
 journalctl -u bitcoin_price_logger.service -f
 ```
 
-
-Summary
-This setup ensures the script runs once per minute, logging the Bitcoin price without requiring a continuous loop inside the script. The timer triggers the bitcoin_price_logger.service every minute, effectively running the script as a scheduled task.referred setup is 
