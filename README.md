@@ -104,3 +104,15 @@ To check logs for the script’s output:
 journalctl -u bitcoin_price_logger.service -f
 ```
 
+### NOTE: yfinance Sourcing Package Managers
+If using a package manager that needs to be sourced to access the yfinance package ensure the yf_bitcoin_price_logger.service ExecStart is adjusted.
+
+For example for Miniconda:
+```ini
+[Unit]
+Description=yf Bitcoin Price Logger Service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "source /path/to/miniconda3/bin/activate && conda activate your_env && python /path/to/btc_prices/yf_btc_prices.py"
+```
