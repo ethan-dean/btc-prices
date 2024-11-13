@@ -63,7 +63,7 @@ OnCalendar=*:*:* *:*:00 Runs the timer every minute.
 Add the following configuration for using the yfinance script:
 ```ini
 [Unit]
-Description=Run yf Bitcoin Price Logger every minute
+Description=Run yf Bitcoin Price Logger once a day
 
 [Timer]
 OnCalendar=*-*-* 00:00:30
