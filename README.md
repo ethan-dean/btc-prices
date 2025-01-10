@@ -24,6 +24,18 @@ Type=oneshot
 ExecStart=/usr/bin/python3 /path/to/btc_prices.py
 ```
 
+Save and close the file.
+
+Save your Python script as /path/to/yf_bitcoin_price_logger.py and make it executable:
+```bash
+chmod +x /path/to/yf_bitcoin_price_logger.py
+```
+
+Create a systemd service file. Open a new file:
+```bash
+sudo nano /etc/systemd/system/yf_bitcoin_price_logger.service
+```
+
 Add the following configuration for using the yfinance script:
 ```ini
 [Unit]
@@ -60,6 +72,13 @@ WantedBy=timers.target
 
 OnCalendar=*:*:* *:*:00 runs the timer once a minute on the 0th second.
 
+Save and close the file.
+
+Create a new timer file:
+```bash
+sudo nano /etc/systemd/system/yf_bitcoin_price_logger.timer
+```
+
 Add the following configuration for using the yfinance script:
 ```ini
 [Unit]
@@ -87,6 +106,8 @@ Enable and start the timer to begin running the script every minute:
 ```bash
 sudo systemctl enable bitcoin_price_logger.timer
 sudo systemctl start bitcoin_price_logger.timer
+sudo systemctl enable yf_bitcoin_price_logger.timer
+sudo systemctl start yf_bitcoin_price_logger.timer
 ```
 
 ### Step 4: Check the Status
@@ -102,6 +123,10 @@ systemctl status yf_bitcoin_price_logger.timer
 To check logs for the script’s output:
 ```bash
 journalctl -u bitcoin_price_logger.service -f
+```
+or
+```bash
+journalctl -u yf_bitcoin_price_logger.service -f
 ```
 
 ### NOTE: yfinance Sourcing Package Managers
