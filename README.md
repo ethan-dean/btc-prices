@@ -58,7 +58,7 @@ AccuracySec=1s
 WantedBy=timers.target
 ```
 
-OnCalendar=*:*:* *:*:00 Runs the timer every minute.
+OnCalendar=*:*:* *:*:00 runs the timer once a minute on the 0th second.
 
 Add the following configuration for using the yfinance script:
 ```ini
@@ -73,7 +73,7 @@ AccuracySec=1s
 WantedBy=timers.target
 ```
 
-OnCalendar=*:*:* 00:00:30 Runs the timer every minute.
+OnCalendar=*:*:* 00:00:30 runs the timer once a day at 12:00:30am.
 
 Save and close the file.
 
