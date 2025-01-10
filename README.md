@@ -63,7 +63,7 @@ Add the following configuration to the file:
 Description=Run Bitcoin Price Logger every minute
 
 [Timer]
-OnCalendar=*:*:* *:*:00
+OnCalendar=*-*-* *:*:00
 AccuracySec=1s
 
 [Install]
