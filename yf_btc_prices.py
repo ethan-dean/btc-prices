@@ -1,12 +1,10 @@
-# import time
-# import requests
 import os
 from datetime import datetime, timezone, timedelta
 import yfinance as yf
 import pandas as pd
 
 # Set the number of days that the script pulls data for
-NUM_DAYS_OF_DATA = 5
+NUM_DAYS_OF_DATA = 1
 
 # Get the directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -28,22 +26,20 @@ def fetch_bitcoin_prices():
     try:
         # Set start and end dates to fetch full 5 days of historical data
         end_date = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
-        start_date = end_date - timedelta(days=1)
+        start_date = end_date - timedelta(days=NUM_DAYS_OF_DATA)
 
         # Use yfinance to get Bitcoin's price data for 5 full days at 1-minute intervals
         ticker = yf.Ticker('BTC-USD')
 
-        # 1-minute interval for NUM_DAYS_OF_DATA
-        data = ticker.history(start=start_date, end=end_date, interval="1m")       # Use yfinance to get Bitcoin's price data for the entire day at 1-minute intervals
-        # data = ticker.history(period=f'{NUM_DAYS_OF_DATA}d', interval="1m")
+        # Use yfinance to get Bitcoin's price data for NUM_DAYS_OF_DATA at 1-minute intervals
+        data = ticker.history(start=start_date, end=end_date, interval="1m")
 
         # Extract the 'Close' column and reset the index to use the time as a column
         data = data[['Close']].reset_index()
         data.columns = ['time', 'price']
 
-        # Debug to check number of rows
+        # Check original number of rows
         original_num_rows = data.shape[0]
-        print(f'API Data, Original Number of Rows: {original_num_rows}')
 
         # Ensure the last day has a price at 23:59
         last_day_end = end_date - timedelta(minutes=1)
@@ -56,7 +52,8 @@ def fetch_bitcoin_prices():
         # likely due to low price volatility
         data = data.set_index('time').asfreq('1min').ffill().reset_index()
 
-        # Debug to check the number of rows
+        # Compare the number of rows from API vs number of rows once filled(should be 1440)
+        print(f'API Data, Original Number of Rows: {original_num_rows}')
         print(f'API Data, Filled Number of Rows: {data.shape[0]}')
 
         # Convert the 'time' column to seconds since epoch

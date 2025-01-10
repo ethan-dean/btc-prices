@@ -3,8 +3,21 @@ import requests
 import os
 from datetime import datetime
 
+def get_day_count_since_first_day():
+    # Calculate the number of days since the first day
+    # first day = day of block time from genesis block
+    # Bitcoin Genesis Block = January 3, 2009
+    first_day = datetime(2009, 1, 3)
+    current_day = datetime.now()
+    delta = current_day - first_day
+    return delta.days
+
+# Dynamically rotate through keys
+API_KEYS=[]
+MOD_DAY = get_day_count_since_first_day() % len(API_KEYS)
+
 # Set up your API key and endpoint
-API_KEY = 'API_KEY'
+API_KEY = API_KEYS[MOD_DAY]
 URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
 PARAMS = {
     'symbol': 'BTC',
@@ -14,6 +27,7 @@ HEADERS = {
     'Accepts': 'application/json',
     'X-CMC_PRO_API_KEY': API_KEY
 }
+
 # Get the directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -29,15 +43,6 @@ def log_error(message):
     with open(ERROR_LOG_PATH, 'a') as f:
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         f.write(f"{timestamp} - ERROR - {message}\n")
-
-def get_day_count_since_first_day():
-    # Calculate the number of days since the first day
-    # first day = day of block time from genesis block
-    # Bitcoin Genesis Block = January 3, 2009
-    first_day = datetime(2009, 1, 3)
-    current_day = datetime.now()
-    delta = current_day - first_day
-    return delta.days
 
 def fetch_bitcoin_price():
     try:
